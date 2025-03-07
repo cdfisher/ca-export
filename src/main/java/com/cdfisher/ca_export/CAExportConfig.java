@@ -1,13 +1,13 @@
-package com.example;
+package com.cdfisher.ca_export;
 
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 
-@ConfigGroup("example")
-public interface ExampleConfig extends Config
+@ConfigGroup("CAExport")
+public interface CAExportConfig extends Config
 {
-	@ConfigItem(
+/*	@ConfigItem(
 		keyName = "greeting",
 		name = "Welcome Greeting",
 		description = "The message to show to the user when they login"
@@ -15,5 +15,5 @@ public interface ExampleConfig extends Config
 	default String greeting()
 	{
 		return "Hello";
-	}
+	}*/
 }
