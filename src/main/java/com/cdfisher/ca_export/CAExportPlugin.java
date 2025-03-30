@@ -68,9 +68,11 @@ public class CAExportPlugin extends Plugin
 			var e = client.getEnum(enumId);
 			for (int structId : e.getIntVals())
 			{
+				String desc;
+
 				var struct = client.getStructComposition(structId);
 				var name = struct.getStringValue(1308);
-				var desc = struct.getStringValue(1309);
+				desc = (config.includeDescriptions() ? struct.getStringValue(1309) : null);
 				int id = struct.getIntValue(1306);
 				boolean completed = (client.getVarpValue(varpIds[id / 32]) & (1 << (id % 32))) != 0;
 

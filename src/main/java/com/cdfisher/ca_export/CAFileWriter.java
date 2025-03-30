@@ -14,7 +14,8 @@ public class CAFileWriter
 {
 	private String fileName;
 	private static final File CA_EXPORT_DIR = new File(RUNELITE_DIR, "ca_exporter");
-	public void writeGSON(String username, List<CAEntry> caEntries)
+
+	public void writeGSON(String username, List<CAEntry> caEntries, boolean writeDescriptions)
 	{
 		try
 		{

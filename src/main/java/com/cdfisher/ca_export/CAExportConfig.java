@@ -8,12 +8,22 @@ import net.runelite.client.config.ConfigItem;
 public interface CAExportConfig extends Config
 {
 /*	@ConfigItem(
-		keyName = "greeting",
-		name = "Welcome Greeting",
-		description = "The message to show to the user when they login"
+		keyName = "printFilePath",
+		name = "Print file path",
+		description = "Print the path to the exported JSON file as a game message."
 	)
-	default String greeting()
+	default boolean printFilePath()
 	{
-		return "Hello";
+		return true;
 	}*/
+
+	@ConfigItem(
+		keyName = "includeDescriptions",
+		name = "Include CA descriptions",
+		description = "Include the description of each combat achievement in the exported file."
+	)
+	default boolean includeDescriptions()
+	{
+		return false;
+	}
 }
