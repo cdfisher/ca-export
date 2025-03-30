@@ -40,7 +40,9 @@ import net.runelite.client.plugins.PluginDescriptor;
 
 @Slf4j
 @PluginDescriptor(
-	name = "Combat Achievement Exporter"
+	name = "Combat Achievement Exporter",
+	description = "Export Combat Achievements to JSON",
+	tags = {"combat", "achievements", "export", "json"}
 )
 public class CAExportPlugin extends Plugin
 {
