@@ -4,6 +4,7 @@ import com.google.inject.Provides;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ScheduledExecutorService;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
@@ -21,6 +22,9 @@ public class CAExportPlugin extends Plugin
 {
 	@Inject
 	private Client client;
+
+	@Inject
+	private ScheduledExecutorService executor;
 
 	@Inject
 	private CAExportConfig config;
@@ -81,7 +85,8 @@ public class CAExportPlugin extends Plugin
 		if (commandExecuted.getCommand().equalsIgnoreCase("caexport"))
 		{
 			getCAEntries();
-			fileWriter.writeGSON(client.getLocalPlayer().getName(), caEntries);
+			executor.submit(() -> fileWriter.writeGSON(client.getLocalPlayer().getName(), caEntries,
+				config.includeDescriptions()));
 		}
 	}
 

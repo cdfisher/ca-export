@@ -12,6 +12,7 @@ import net.runelite.http.api.RuneLiteAPI;
 @Slf4j
 public class CAFileWriter
 {
+	private String fileName;
 	private static final File CA_EXPORT_DIR = new File(RUNELITE_DIR, "ca_exporter");
 	public void writeGSON(String username, List<CAEntry> caEntries)
 	{
@@ -19,9 +20,9 @@ public class CAFileWriter
 		{
 			CA_EXPORT_DIR.mkdir();
 			//set file name to <username>.json
-			final String name = username.toLowerCase().trim() + ".json";
+			fileName = username.toLowerCase().trim() + ".json";
 			// write gson to CA_EXPORT_DIR/filename
-			final BufferedWriter writer = new BufferedWriter(new FileWriter(new File(CA_EXPORT_DIR, name), false));
+			final BufferedWriter writer = new BufferedWriter(new FileWriter(new File(CA_EXPORT_DIR, fileName), false));
 			final String caString = RuneLiteAPI.GSON.toJson(caEntries);
 			writer.append(caString);
 			writer.close();
@@ -30,7 +31,7 @@ public class CAFileWriter
 		{
 			log.warn("CA Exporter: Error writing combat achievements to file: {}", e.getMessage());
 		}
+		log.info("Wrote Combat Achievement JSON to {}/{}", CA_EXPORT_DIR.getName().replace("\\", "/"), fileName);
 	}
-
 
 }
