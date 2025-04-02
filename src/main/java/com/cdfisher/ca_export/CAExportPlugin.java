@@ -24,6 +24,7 @@
  */
 package com.cdfisher.ca_export;
 
+import com.google.gson.Gson;
 import com.google.inject.Provides;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +55,9 @@ public class CAExportPlugin extends Plugin
 
 	@Inject
 	private CAExportConfig config;
+
+	@Inject
+	private Gson gson;
 
 	private static final Map<Integer, String> tierMap = Map.of(
 		3981, "Easy",
@@ -114,7 +118,7 @@ public class CAExportPlugin extends Plugin
 		{
 			getCAEntries();
 			executor.submit(() -> fileWriter.writeGSON(client.getLocalPlayer().getName(), caEntries,
-				config.includeDescriptions()));
+				config.includeDescriptions(), gson));
 		}
 	}
 

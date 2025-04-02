@@ -24,6 +24,7 @@
  */
 package com.cdfisher.ca_export;
 
+import com.google.gson.Gson;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -31,7 +32,6 @@ import java.io.IOException;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import static net.runelite.client.RuneLite.RUNELITE_DIR;
-import net.runelite.http.api.RuneLiteAPI;
 
 @Slf4j
 public class CAFileWriter
@@ -39,7 +39,7 @@ public class CAFileWriter
 	private String fileName;
 	private static final File CA_EXPORT_DIR = new File(RUNELITE_DIR, "ca_exporter");
 
-	public void writeGSON(String username, List<CAEntry> caEntries, boolean writeDescriptions)
+	public void writeGSON(String username, List<CAEntry> caEntries, boolean writeDescriptions, Gson gson)
 	{
 		try
 		{
@@ -48,7 +48,7 @@ public class CAFileWriter
 			fileName = username.toLowerCase().trim() + ".json";
 			// write gson to CA_EXPORT_DIR/filename
 			final BufferedWriter writer = new BufferedWriter(new FileWriter(new File(CA_EXPORT_DIR, fileName), false));
-			final String caString = RuneLiteAPI.GSON.toJson(caEntries);
+			final String caString = gson.toJson(caEntries);
 			writer.append(caString);
 			writer.close();
 		}
