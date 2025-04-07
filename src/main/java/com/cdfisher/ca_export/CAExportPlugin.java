@@ -34,6 +34,7 @@ import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.events.CommandExecuted;
+import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
@@ -49,6 +50,9 @@ public class CAExportPlugin extends Plugin
 {
 	@Inject
 	private Client client;
+
+	@Inject
+	private ChatMessageManager chatMessageManager;
 
 	@Inject
 	private ScheduledExecutorService executor;
@@ -117,8 +121,14 @@ public class CAExportPlugin extends Plugin
 		if (commandExecuted.getCommand().equalsIgnoreCase("caexport"))
 		{
 			getCAEntries();
-			executor.submit(() -> fileWriter.writeGSON(client.getLocalPlayer().getName(), caEntries,
-				config.includeDescriptions(), gson));
+			if (config.printFilePath())
+			{
+				executor.submit(() -> fileWriter.writeGSON(client.getLocalPlayer().getName(), caEntries,
+					config.includeDescriptions(), gson, chatMessageManager));
+			} else {
+				executor.submit(() -> fileWriter.writeGSON(client.getLocalPlayer().getName(), caEntries,
+					config.includeDescriptions(), gson));
+			}
 		}
 	}
 

@@ -31,7 +31,7 @@ import net.runelite.client.config.ConfigItem;
 @ConfigGroup("CAExport")
 public interface CAExportConfig extends Config
 {
-/*	@ConfigItem(
+	@ConfigItem(
 		keyName = "printFilePath",
 		name = "Print file path",
 		description = "Print the path to the exported JSON file as a game message."
@@ -39,7 +39,7 @@ public interface CAExportConfig extends Config
 	default boolean printFilePath()
 	{
 		return true;
-	}*/
+	}
 
 	@ConfigItem(
 		keyName = "includeDescriptions",
