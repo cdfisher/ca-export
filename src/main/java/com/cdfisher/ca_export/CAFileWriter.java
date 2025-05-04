@@ -42,8 +42,16 @@ public class CAFileWriter
 {
 	private String fileName;
 	private static final File CA_EXPORT_DIR = new File(RUNELITE_DIR, "ca_exporter");
+	private Gson gson;
+	private ChatMessageManager chatMessageManager;
 
-	public void writeGSON(String username, List<CAEntry> caEntries, boolean writeDescriptions, Gson gson, ChatMessageManager chatMessageManager)
+	public CAFileWriter(Gson gson, ChatMessageManager chatMessageManager)
+	{
+		this.gson = gson;
+		this.chatMessageManager = chatMessageManager;
+	}
+
+	public void writeGSON(String username, List<CAEntry> caEntries, boolean printPath)
 	{
 		try
 		{
@@ -52,7 +60,7 @@ public class CAFileWriter
 			fileName = username.toLowerCase().trim() + ".json";
 			// write gson to CA_EXPORT_DIR/filename
 			final BufferedWriter writer = new BufferedWriter(new FileWriter(new File(CA_EXPORT_DIR, fileName), false));
-			final String caString = gson.toJson(caEntries);
+			final String caString = this.gson.toJson(caEntries);
 			writer.append(caString);
 			writer.close();
 		}
@@ -62,7 +70,7 @@ public class CAFileWriter
 		}
 		log.info("Wrote Combat Achievement JSON to {}/{}", CA_EXPORT_DIR.getName().replace("\\", "/"), fileName);
 
-		if (chatMessageManager != null)
+		if (printPath)
 		{
 			ChatMessageBuilder message = new ChatMessageBuilder()
 				.append("[Combat Achievement Exporter] Wrote Combat Achievements to ")
@@ -70,17 +78,12 @@ public class CAFileWriter
 				.append("/")
 				.append(fileName);
 
-			chatMessageManager.queue(QueuedMessage.builder()
+			this.chatMessageManager.queue(QueuedMessage.builder()
 				.type(ChatMessageType.GAMEMESSAGE)
 				.runeLiteFormattedMessage(message.build())
 				.build());
 		}
 
-	}
-
-	public void writeGSON(String username, List<CAEntry> caEntries, boolean writeDescriptions, Gson gson)
-	{
-		writeGSON(username, caEntries, writeDescriptions, gson, null);
 	}
 
 }

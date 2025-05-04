@@ -64,6 +64,8 @@ public class CAExportPlugin extends Plugin
 	@Inject
 	private Gson gson;
 
+	private CAFileWriter fileWriter;
+
 	private static final Map<Integer, String> tierMap = Map.of(
 		3981, "Easy",
 		3982, "Medium",
@@ -77,9 +79,8 @@ public class CAExportPlugin extends Plugin
 
 	private List<CAEntry> caEntries = new ArrayList<>();
 
-	private CAFileWriter fileWriter = new CAFileWriter();
 
-int[] varpIds = new int[]{VarPlayerID.CA_TASK_COMPLETED_0,
+	int[] varpIds = new int[]{VarPlayerID.CA_TASK_COMPLETED_0,
 		VarPlayerID.CA_TASK_COMPLETED_1,
 		VarPlayerID.CA_TASK_COMPLETED_2,
 		VarPlayerID.CA_TASK_COMPLETED_3,
@@ -103,6 +104,7 @@ int[] varpIds = new int[]{VarPlayerID.CA_TASK_COMPLETED_0,
 	@Override
 	protected void startUp() throws Exception
 	{
+		fileWriter = new CAFileWriter(gson, chatMessageManager);
 		log.debug("CA Exporter started!");
 	}
 
@@ -140,17 +142,10 @@ int[] varpIds = new int[]{VarPlayerID.CA_TASK_COMPLETED_0,
 		if (commandExecuted.getCommand().equalsIgnoreCase("caexport"))
 		{
 			getCAEntries();
-			if (config.printFilePath())
-			{
-				executor.submit(() -> fileWriter.writeGSON(client.getLocalPlayer().getName(), caEntries,
-					config.includeDescriptions(), gson, chatMessageManager));
-			} else {
-				executor.submit(() -> fileWriter.writeGSON(client.getLocalPlayer().getName(), caEntries,
-					config.includeDescriptions(), gson));
-			}
+			executor.submit(() -> fileWriter.writeGSON(client.getLocalPlayer().getName(), caEntries,
+				config.printFilePath()));
 		}
 	}
-
 
 	@Provides
 	CAExportConfig provideConfig(ConfigManager configManager)
