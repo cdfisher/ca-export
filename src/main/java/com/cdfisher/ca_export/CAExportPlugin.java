@@ -37,6 +37,7 @@ import net.runelite.api.events.CommandExecuted;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
+import net.runelite.api.gameval.VarPlayerID;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 
@@ -78,8 +79,26 @@ public class CAExportPlugin extends Plugin
 
 	private CAFileWriter fileWriter = new CAFileWriter();
 
-	int[] varpIds = new int[]{3116, 3117, 3118, 3119, 3120, 3121, 3122, 3123, 3124, 3125, 3126, 3127, 3128, 3387, 3718,
-		3773, 3774, 4204, 4496};
+int[] varpIds = new int[]{VarPlayerID.CA_TASK_COMPLETED_0,
+		VarPlayerID.CA_TASK_COMPLETED_1,
+		VarPlayerID.CA_TASK_COMPLETED_2,
+		VarPlayerID.CA_TASK_COMPLETED_3,
+		VarPlayerID.CA_TASK_COMPLETED_4,
+		VarPlayerID.CA_TASK_COMPLETED_5,
+		VarPlayerID.CA_TASK_COMPLETED_6,
+		VarPlayerID.CA_TASK_COMPLETED_7,
+		VarPlayerID.CA_TASK_COMPLETED_8,
+		VarPlayerID.CA_TASK_COMPLETED_9,
+		VarPlayerID.CA_TASK_COMPLETED_10,
+		VarPlayerID.CA_TASK_COMPLETED_11,
+		VarPlayerID.CA_TASK_COMPLETED_12,
+		VarPlayerID.CA_TASK_COMPLETED_13,
+		VarPlayerID.CA_TASK_COMPLETED_14,
+		VarPlayerID.CA_TASK_COMPLETED_15,
+		VarPlayerID.CA_TASK_COMPLETED_16,
+		VarPlayerID.CA_TASK_COMPLETED_17,
+		VarPlayerID.CA_TASK_COMPLETED_18,
+	};
 
 	@Override
 	protected void startUp() throws Exception
