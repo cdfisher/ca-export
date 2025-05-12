@@ -104,7 +104,7 @@ public class CAExportPlugin extends Plugin
 	@Override
 	protected void startUp() throws Exception
 	{
-		fileWriter = new CAFileWriter(gson, chatMessageManager);
+		fileWriter = new CAFileWriter(gson, chatMessageManager, client);
 		log.debug("CA Exporter started!");
 	}
 
