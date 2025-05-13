@@ -36,6 +36,7 @@ import net.runelite.api.Client;
 import net.runelite.api.events.CommandExecuted;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.config.ConfigManager;
+import net.runelite.client.config.RuneScapeProfileType;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.api.gameval.VarPlayerID;
 import net.runelite.client.plugins.Plugin;
@@ -63,6 +64,25 @@ public class CAExportPlugin extends Plugin
 
 	@Inject
 	private Gson gson;
+
+	private RuneScapeProfileType profileType;
+
+	private String profileTypeIdentifier;
+
+	private static final Map<RuneScapeProfileType, String> profileTypeStrs = Map.of(
+		RuneScapeProfileType.STANDARD, "",
+		RuneScapeProfileType.BETA, "-BETA",
+		RuneScapeProfileType.QUEST_SPEEDRUNNING, "-QSR",
+		RuneScapeProfileType.DEADMAN, "-DMM",
+		RuneScapeProfileType.PVP_ARENA, "-PVP-ARENA",
+		// Anything from here to Raging Echoes shouldn't be possible, but I'm including all the values in the
+		// RuneScapeProfileType enum for completeness
+		RuneScapeProfileType.TRAILBLAZER_LEAGUE, "-LEAGUES-2",
+		RuneScapeProfileType.DEADMAN_REBORN, "-DMM-REBORN",
+		RuneScapeProfileType.SHATTERED_RELICS_LEAGUE, "-LEAGUES-3",
+		RuneScapeProfileType.TRAILBLAZER_RELOADED_LEAGUE, "-LEAGUES-4",
+		RuneScapeProfileType.RAGING_ECHOES_LEAGUE, "-LEAGUES-5"
+	);
 
 	private CAFileWriter fileWriter;
 
@@ -104,7 +124,7 @@ public class CAExportPlugin extends Plugin
 	@Override
 	protected void startUp() throws Exception
 	{
-		fileWriter = new CAFileWriter(gson, chatMessageManager, client);
+		fileWriter = new CAFileWriter(gson, chatMessageManager);
 		log.debug("CA Exporter started!");
 	}
 
@@ -142,8 +162,10 @@ public class CAExportPlugin extends Plugin
 		if (commandExecuted.getCommand().equalsIgnoreCase("caexport"))
 		{
 			getCAEntries();
+			profileType = RuneScapeProfileType.getCurrent(client);
+			profileTypeIdentifier = profileTypeStrs.get(profileType);
 			executor.submit(() -> fileWriter.writeGSON(client.getLocalPlayer().getName(), caEntries,
-				config.printFilePath()));
+				config.printFilePath(), profileTypeIdentifier));
 		}
 	}
 

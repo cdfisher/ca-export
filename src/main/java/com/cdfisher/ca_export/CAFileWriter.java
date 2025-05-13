@@ -30,15 +30,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
-import net.runelite.api.Client;
 import static net.runelite.client.RuneLite.RUNELITE_DIR;
 import net.runelite.client.chat.ChatMessageBuilder;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
-import net.runelite.client.config.RuneScapeProfileType;
 
 @Slf4j
 public class CAFileWriter
@@ -47,44 +44,23 @@ public class CAFileWriter
 	private static final File CA_EXPORT_DIR = new File(RUNELITE_DIR, "ca_exporter");
 	private Gson gson;
 	private ChatMessageManager chatMessageManager;
-	private Client client;
-	private RuneScapeProfileType profileType;
 
-	private static final Map<RuneScapeProfileType, String> profileTypeStrs = Map.of(
-		RuneScapeProfileType.STANDARD, "",
-		RuneScapeProfileType.BETA, "-BETA",
-		RuneScapeProfileType.QUEST_SPEEDRUNNING, "-QSR",
-		RuneScapeProfileType.DEADMAN, "-DMM",
-		RuneScapeProfileType.PVP_ARENA, "-PVP-ARENA",
-		RuneScapeProfileType.TRAILBLAZER_LEAGUE, "-LEAGUES-2", // Anything from here to Raging Echoes shouldn't be
-																// possible but I'm including all the values in the
-																// RuneScapeProfileType enum for completeness
-		RuneScapeProfileType.DEADMAN_REBORN, "-DMM-REBORN",
-		RuneScapeProfileType.SHATTERED_RELICS_LEAGUE, "-LEAGUES-3",
-		RuneScapeProfileType.TRAILBLAZER_RELOADED_LEAGUE, "-LEAGUES-4",
-		RuneScapeProfileType.RAGING_ECHOES_LEAGUE, "-LEAGUES-5"
-	);
-
-	private String profileTypeIdentifier;
-
-	public CAFileWriter(Gson gson, ChatMessageManager chatMessageManager, Client client)
+	public CAFileWriter(Gson gson, ChatMessageManager chatMessageManager)
 	{
 		this.gson = gson;
 		this.chatMessageManager = chatMessageManager;
-		this.client = client;
 	}
 
-	public void writeGSON(String username, List<CAEntry> caEntries, boolean printPath)
+	public void writeGSON(String username, List<CAEntry> caEntries, boolean printPath, String profileTypeIdentifier)
 	{
-		profileType = RuneScapeProfileType.getCurrent(client);
-		profileTypeIdentifier = profileTypeStrs.get(profileType);
 		try
 		{
 			CA_EXPORT_DIR.mkdir();
 			//set file name to <username>.json
 			fileName = username.toLowerCase().trim() + profileTypeIdentifier + ".json";
 			// write gson to CA_EXPORT_DIR/filename
-			final BufferedWriter writer = new BufferedWriter(new FileWriter(new File(CA_EXPORT_DIR, fileName), false));
+			final BufferedWriter writer = new BufferedWriter(new FileWriter(new File(CA_EXPORT_DIR, fileName),
+				false));
 			final String caString = this.gson.toJson(caEntries);
 			writer.append(caString);
 			writer.close();
@@ -93,7 +69,8 @@ public class CAFileWriter
 		{
 			log.warn("CA Exporter: Error writing combat achievements to file: {}", e.getMessage());
 		}
-		log.info("Wrote Combat Achievement JSON to {}/{}", CA_EXPORT_DIR.getName().replace("\\", "/"), fileName);
+		log.info("Wrote Combat Achievement JSON to {}/{}", CA_EXPORT_DIR.getName().replace("\\", "/"),
+			fileName);
 
 		if (printPath)
 		{
