@@ -27,7 +27,6 @@ dependencies {
 }
 
 group = 'com.cdfisher.ca_export'
-version = '1.2.1'
 
 tasks.withType(JavaCompile).configureEach {
 	options.encoding = 'UTF-8'
