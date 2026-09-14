@@ -120,6 +120,7 @@ public class CAExportPlugin extends Plugin
 		VarPlayerID.CA_TASK_COMPLETED_17,
 		VarPlayerID.CA_TASK_COMPLETED_18,
 		VarPlayerID.CA_TASK_COMPLETED_19,
+		VarPlayerID.CA_TASK_COMPLETED_20,
 	};
 
 	@Override
